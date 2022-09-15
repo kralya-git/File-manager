@@ -7,15 +7,159 @@
 ## Задания для выполнения
 Необходимо создать примитивный файловый менеджер. Программа должна работать в определенной папке (рабочей папки менеджера) и позволять пользователю выполнять следующие простые действия в пределах рабочей папки:
 1. Создание папки (с указанием имени);
+
+```Python
+def NewFolder(current_directory):
+    folder_name = input('Введите название паки чтобы создать ее в директории: ')
+
+    # создание папки
+    os.mkdir(folder_name)
+    print('Готово! Папка создана с именем - ', folder_name, ' в директории: ', current_directory)
+```
+
 2. Удаление папки по имени;
+
+```Python
+
+def DeleteFile(current_directory, separator):
+    file_path = input('Введите путь к файлу для удаления: ')
+
+    # удаляем файл
+    os.remove(current_directory + separator + file_path, dir_fd=None)
+    print('Готово! Файл ', file_path, ' удален из директории: ', current_directory)
+```
+
 3. Перемещение между папками (в пределах рабочей папки) - заход в папку по имени, выход на уровень вверх;
+
+```Python
+def SwitchingDirectory(current_directory, separator):
+    direct = input('Введите назвние каталога: ')
+
+    # обновление полного названия каталога
+    directory = (current_directory + separator + direct)
+
+    # возвращение списка с именами файлов и директорий в каталоге directory
+    files = os.listdir(directory)
+    for i in files:
+        print(i)
+
+    # изменение текущего рабочего каталога
+    os.chdir(current_directory + separator + direct)
+
+    # функция возвращает измененное полное название каталога
+    return directory
+
+
+
+def UpperDirectory(current_directory, separator):
+    # делаем массив из названий папок
+    directory_array = current_directory.split(separator)
+    print(directory_array[-1])
+
+    # делаем массив для удаления из полного названия лишней папки
+    directory = current_directory.split(separator + directory_array[-1])
+    print(directory[0])
+
+    # функция выводит новое полное название каталога
+    return directory[0]
+```
+
 4. Создание пустых файлов с указанием имени;
+
+```Python
+def NewFile(current_directory):
+    file_name = input('Введите имя и расширение файла: ')
+
+    # открытие файла
+    # параметр w означает, что файл открыт для записи (перед записью файл будет очищен)
+    open(file_name, "w")
+    print('Файл создан в директории: ', current_directory, ' с именем ', file_name)
+```
+
 5. Запись текста в файл;
+
+```Python
+def AddContentFile(current_directory, separator):
+    in_file = input('Введите путь к файлу: ')
+
+    # открываем файл
+    # параметр a означает, что файл открыт для добавления в конец
+    my_file = open(current_directory + separator + in_file, "a")
+    writing = input('Введите текст: \n')
+    my_file.write(writing)
+    my_file.close()
+
+    print('Запись сдедлана в файл - ', in_file)
+```
+
 6. Просмотр содержимого текстового файла;
+
+```Python
+def ReadFile(current_directory, separator):
+    in_file = input('Введите путь к файлу: ')
+
+    # открываем файл
+    my_file = open(current_directory + separator + in_file)
+
+    # аписываем содержимое в переменную my_string
+    my_string = my_file.read()
+    print(my_string)
+
+    # закрываем файл
+    my_file.close()
+
+    print('Прочитан файл - ', in_file)
+```
+
 7. Удаление файлов по имени;
+
+```Python
+def DeleteFile(current_directory, separator):
+    file_path = input('Введите путь к файлу для удаления: ')
+
+    # удаляем файл
+    os.remove(current_directory + separator + file_path, dir_fd=None)
+    print('Готово! Файл ', file_path, ' удален из директории: ', current_directory)
+```
+
 8. Копирование файлов из одной папки в другую;
+
+```Python
+def CopyFile(current_directory, separator):
+    path1 = input('Введите путь файла, который нужно скопировать: \n')
+    path2 = input('Введите путь, куда нужно скопировать: \n')
+
+    # копируем файл
+    shutil.copy2(current_directory + separator + path1, current_directory + separator + path2)
+
+    print('Файл скопирован в ', current_directory + separator + path2)
+```
+
 9. Перемещение файлов;
+
+```Python
+def MoveFile(current_directory, separator):
+    path1 = input('Введите путь файла, который нужно переместить: \n')
+    path2 = input('Введите путь, куда нужно переместить: \n')
+
+    # перемещаем файл в указанный каталог
+    shutil.move(current_directory + separator + path1, current_directory + separator + path2)
+
+    print('Файл перемещен в ', current_directory + separator + path2)
+```
+
 10. Переименование файлов.
+
+```Python
+def RenameFile(current_directory, separator):
+    path1 = input('Введите путь файла, который нужно переименовать: \n')
+    path2 = input('Введите новое имя: \n')
+
+    # переименовываем файл и сразу меняем полный путь
+    os.rename(current_directory + separator + path1, current_directory + separator + path2)
+    print('Файл переименован. Новый путь: ', current_directory + separator + path2)
+```
+
 
 ## Указания к выполнению
 1. Расположение рабочей папки должно указываться в настройках файлового менеджера. Настройки должны располагаться в отдельном от основного исходного кода файле.
